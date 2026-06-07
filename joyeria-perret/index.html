@@ -1066,7 +1066,7 @@ footer {
   height: 100%;
   object-fit: cover;
   filter: brightness(0.8) sepia(0.08);
-  transition: transform 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transition: transform 1s cubic-bezier(0.25, 0.8, 0.25, 1), opacity 0.3s ease;
 }
 .savoir-visual:hover .savoir-img {
   transform: scale(1.03);
@@ -1641,7 +1641,7 @@ footer {
 <section id="savoir-faire">
   <div class="savoir-container">
     <div class="savoir-visual">
-      <img src="savoir_faire_design.png" alt="Savoir-Faire: El Taller Artesanal Perret" class="savoir-img fade-up">
+      <img src="savoir_faire_design.png" alt="Savoir-Faire: El Taller Artesanal Perret" class="savoir-img fade-up" id="savoirImg">
       <div class="savoir-visual-overlay"></div>
     </div>
     <div class="savoir-content">
@@ -2164,8 +2164,31 @@ document.querySelector('form').addEventListener('submit', e => {
 
 // Savoir-Faire Steps Accordion / Timeline Interactivity
 const savoirSteps = document.querySelectorAll('.savoir-step');
+const savoirImg = document.getElementById('savoirImg');
+const savoirImages = {
+  "1": "savoir_faire_design.png",
+  "2": "savoir_faire_modelado.png",
+  "3": "savoir_faire_fundicion.png",
+  "4": "savoir_faire_engarce.png",
+  "5": "savoir_faire_pulido.png"
+};
+
 savoirSteps.forEach(step => {
   step.addEventListener('click', () => {
+    const stepNum = step.getAttribute('data-step');
+    if (savoirImages[stepNum] && savoirImg) {
+      savoirImg.style.opacity = '0';
+      setTimeout(() => {
+        savoirImg.src = savoirImages[stepNum];
+        savoirImg.onload = () => {
+          savoirImg.style.opacity = '1';
+        };
+        setTimeout(() => {
+          savoirImg.style.opacity = '1';
+        }, 150);
+      }, 300);
+    }
+
     // Remove active class from all steps
     savoirSteps.forEach(s => s.classList.remove('active'));
     // Add active class to clicked step
